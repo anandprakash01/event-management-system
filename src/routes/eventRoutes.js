@@ -23,16 +23,16 @@ const router = express.Router();
 
 router.get("/", getAllEvents);
 
-router.get("/my-tickets", protect, getMyTickets);
-
 router.post(
-  "/create",
+  "/",
   protect,
   restrictTo("admin"),
   cleanEmptyStrings,
   validate(createEventValidator),
   createEvent,
 );
+
+router.get("/my-tickets", protect, getMyTickets);
 
 router.get("/:id", getEventById);
 
