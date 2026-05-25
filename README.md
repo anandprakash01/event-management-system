@@ -57,38 +57,38 @@ Designed as a reusable backend foundation, it can be extended for booking flows,
 ```text
 event-management-system/
 ├── config/
-│   ├── db.js          # MongoDB connection configuration
-│   └── env.js         # Environment variables validation
+│   ├── db.js                  # MongoDB connection configuration
+│   └── env.js                 # Environment variables validation
 ├── src/
-│   ├── controllers/   # Request handlers
-│   │   ├── authController.js
-│   │   ├── eventController.js
-│   │   └── userController.js
-│   ├── middlewares/   # Express middlewares
+│   ├── middlewares/           # Global Express middlewares
 │   │   ├── authMiddleware.js
 │   │   ├── cleanEmptyStrings.js
 │   │   ├── errorHandler.js
 │   │   └── validate.js
-│   ├── models/        # Mongoose schemas
-│   │   ├── Attendee.js
-│   │   ├── Event.js
-│   │   └── User.js
-│   ├── routes/        # API routes
-│   │   ├── authRoutes.js
-│   │   ├── eventRoutes.js
-│   │   └── userRoutes.js
-│   ├── utils/         # Utility functions
+│   ├── modules/               # Feature-based domain modules
+│   │   ├── auth/              # Auth domain (routes, controllers, etc.)
+│   │   │   ├── auth.controller.js
+│   │   │   └── auth.routes.js
+│   │   ├── events/            # Events domain
+│   │   │   ├── attendee.model.js
+│   │   │   ├── event.controller.js
+│   │   │   ├── event.model.js
+│   │   │   ├── event.routes.js
+│   │   │   └── event.validation.js
+│   │   └── users/             # Users domain
+│   │       ├── user.controller.js
+│   │       ├── user.model.js
+│   │       ├── user.routes.js
+│   │       └── user.validation.js
+│   ├── utils/                 # Global utility functions
 │   │   └── AppError.js
-│   ├── validations/   # Zod validation schemas
-│   │   ├── eventValidations.js
-│   │   └── userValidations.js
-│   └── app.js         # Express app configuration
-├── .env.example       # Example environment variables
+│   └── app.js                 # Express app configuration
+├── .env.example               # Example environment variables
 ├── .gitignore
 ├── LICENSE
 ├── package.json
 ├── README.md
-└── server.js          # Entry point with cluster mode
+└── server.js                  # Entry point with cluster mode
 ```
 
 ## 🚀 Getting Started & Usage
