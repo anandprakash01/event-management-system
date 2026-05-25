@@ -1,13 +1,13 @@
 import express from "express";
 
-import {protect, restrictTo} from "../middlewares/authMiddleware.js";
-import {validate} from "../middlewares/validate.js";
-import {cleanEmptyStrings} from "../middlewares/cleanEmptyStrings.js";
+import {protect, restrictTo} from "../../middlewares/authMiddleware.js";
+import {validate} from "../../middlewares/validate.js";
+import {cleanEmptyStrings} from "../../middlewares/cleanEmptyStrings.js";
 import {
   createEventValidator,
   deleteEventValidator,
   updateEventValidator,
-} from "../validations/eventValidations.js";
+} from "./event.validations.js";
 
 import {
   createEvent,
@@ -17,7 +17,7 @@ import {
   registerForEvent,
   updateEvent,
   getMyTickets,
-} from "../controllers/eventController.js";
+} from "./event.controller.js";
 
 const router = express.Router();
 

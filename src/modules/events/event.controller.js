@@ -1,7 +1,7 @@
-import Event from "../models/Event.js";
-import Attendee from "../models/Attendee.js";
+import Event from "./event.model.js";
+import Attendee from "./attendee.model.js";
 
-import AppError from "../utils/AppError.js";
+import AppError from "../../utils/AppError.js";
 
 const allowedCategory = [
   "Concert",

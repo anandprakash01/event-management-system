@@ -8,9 +8,9 @@ import env from "../config/env.js";
 import AppError from "./utils/AppError.js";
 import {globalErrorHandler} from "./middlewares/errorHandler.js";
 
-import authRouter from "./routes/authRoutes.js";
-import userRouter from "./routes/userRoutes.js";
-import eventRouter from "./routes/eventRoutes.js";
+import authRouter from "./modules/auth/auth.routes.js";
+import userRouter from "./modules/users/user.routes.js";
+import eventRouter from "./modules/events/event.routes.js";
 
 const app = express();
 

@@ -1,5 +1,5 @@
-import User from "../models/User.js";
-import AppError from "../utils/AppError.js";
+import User from "./user.model.js";
+import AppError from "../../utils/AppError.js";
 
 const getProfile = async (req, res) => {
   res.status(201).json({

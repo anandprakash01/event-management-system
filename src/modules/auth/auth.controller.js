@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
-import User from "../models/User.js";
-import AppError from "../utils/AppError.js";
-import env from "../../config/env.js";
+import User from "../users/user.model.js";
+import AppError from "../../utils/AppError.js";
+import env from "../../../config/env.js";
 
 const cookieOptions = {
   httpOnly: true,
