@@ -1,6 +1,6 @@
 # 🎫 Event Management System
 
-An enterprise-grade, highly scalable backend REST API for an Event Management System. Built with Node.js, Express, MongoDB, and JWT authentication. Features a clean MVC architecture, cluster mode, rate limiting, and comprehensive validation.
+An enterprise-grade, highly scalable backend REST API for an Event Management System. Built with Node.js, Express, MongoDB, and JWT authentication. Features a strict Feature-Based (Domain-Driven) architecture, Node.js cluster mode, aggressive rate limiting, and comprehensive Zod validation.
 
 ## 📖 Table of Contents
 
@@ -21,23 +21,23 @@ An enterprise-grade, highly scalable backend REST API for an Event Management Sy
 
 ## 💡 About the Project
 
-This project is a production-style backend for an event management platform built with **Node.js**, **Express**, **MongoDB**, and **JWT-based authentication**. It provides a clean **MVC-style architecture** for managing users, events, and attendee registrations while keeping the codebase modular, secure, and easy to extend.
+This project is a production-ready backend for an event management platform. It discards the traditional monolithic MVC pattern in favor of a **Feature-Based (Vertical Slicing) architecture**. Every domain (Auth, Users, Events) encapsulates its own routes, controllers, models, and validation logic, keeping the codebase highly modular, isolated, and easy to scale.
 
-The API supports secure user registration and login, role-based access control for admins and users, event creation and management, ticket registration workflows, and centralized error handling. It also includes enterprise-facing safeguards such as **rate limiting**, **Helmet security headers**, **CORS**, **input validation**, and **cluster-based startup** for better scalability.
+The API handles secure user workflows, strict role-based access control (RBAC), and event registrations. It enforces enterprise-facing safeguards including **httpOnly cookie management** for **token security**, **dynamic CORS policies**, and centralized JSend-compliant error handling.
+**Event Management** platform is built with **Node.js**, **Express**, **MongoDB**, and **JWT-based authentication**. It provides a clean **Feature-Based (Domain-Driven) architecture** for managing users, events, and attendee registrations.
 
 Designed as a reusable backend foundation, it can be extended for booking flows, payment integrations, notifications, analytics, and admin dashboards without changing the core structure.
 
 ## ✨ Key Features
 
-- 🔐 **JWT Authentication** - Secure user authentication with JSON Web Tokens, stored in cookies and also returned in the response payload
-- 👥 **Role-Based Access Control (RBAC)** - Admin and user roles with different permissions
+- 🏗️ **Domain-Driven Design** - Feature-based modular structure for high maintainability.
+- 👥 **Role-Based Access Control (RBAC)** - Strict permission checks for Admin, Organizer, and User roles.
+- 🔐 **JWT Authentication** - JWTs delivered securely via httpOnly, secure, and sameSite cookies to prevent XSS/CSRF attacks.
+- 🛡️ **API Security**: Helmet headers, Express rate limiting (pre-JSON parsing), and NoSQL injection protection.
+- ✅ **Strict Data Validation**: Runtime payload validation and sanitization using Zod.
+- 📝 **Standardized Responses**: JSend specification for all success payloads and error handling.
 - 📅 **Event Management** - Create, read, update, and delete events
 - 🎟️ **Attendee Registration** - Users can register for events with ticket types
-- 🔄 **Cluster Mode** - Utilizes all CPU cores for improved performance
-- 🛡️ **Security Features** - Helmet, CORS, rate limiting, and password hashing
-- ✅ **Data Validation** - Zod schemas for request validation
-- 📊 **MVC Architecture** - Clean separation of concerns
-- 📝 **Error Handling** - Centralized error handling mechanism
 
 ## 🧰 Tech Stack & Environment
 
@@ -56,39 +56,49 @@ Designed as a reusable backend foundation, it can be extended for booking flows,
 
 ```text
 event-management-system/
-├── config/
-│   ├── db.js                  # MongoDB connection configuration
-│   └── env.js                 # Environment variables validation
+│
 ├── src/
+│   ├── config/
+│   │   ├── db.js              # MongoDB connection configuration
+│   │   └── env.js             # Environment variables validation
+│   │
 │   ├── middlewares/           # Global Express middlewares
-│   │   ├── authMiddleware.js
-│   │   ├── cleanEmptyStrings.js
-│   │   ├── errorHandler.js
-│   │   └── validate.js
+│   │   ├── auth.middleware.js
+│   │   ├── error.middleware.js
+│   │   ├── sanitize.middleware.js
+│   │   └── validate.middleware.js
+│   │
 │   ├── modules/               # Feature-based domain modules
 │   │   ├── auth/              # Auth domain (routes, controllers, etc.)
 │   │   │   ├── auth.controller.js
-│   │   │   └── auth.routes.js
-│   │   ├── events/            # Events domain
+│   │   │   ├── auth.routes.js
+│   │   │   └── auth.validation.js
+│   │   │
+│   │   ├── event/             # Event domain
 │   │   │   ├── attendee.model.js
 │   │   │   ├── event.controller.js
 │   │   │   ├── event.model.js
 │   │   │   ├── event.routes.js
 │   │   │   └── event.validation.js
-│   │   └── users/             # Users domain
+│   │   │
+│   │   └── user/              # User domain
 │   │       ├── user.controller.js
 │   │       ├── user.model.js
-│   │       ├── user.routes.js
-│   │       └── user.validation.js
+│   │       └── user.routes.js
+│   │
 │   ├── utils/                 # Global utility functions
-│   │   └── AppError.js
-│   └── app.js                 # Express app configuration
+│   │   ├── AppError.js
+│   │   ├── asyncHandler.js
+│   │   └── crashHandler.js
+│   │
+│   ├── app.js                 # Express app configuration
+│   └── server.js              # Entry point
+│
 ├── .env.example               # Example environment variables
 ├── .gitignore
 ├── LICENSE
 ├── package.json
 ├── README.md
-└── server.js                  # Entry point with cluster mode
 ```
 
 ## 🚀 Getting Started & Usage
@@ -111,7 +121,7 @@ NODE_ENV = development
 PORT = 3000
 MONGO_URI = mongodb://localhost:27017/event_management_system
 JWT_SECRET_KEY = your-super-secret-jwt-key-here
-JWT_EXPIRE = 30d
+JWT_EXPIRE = 7d
 ```
 
 #### Variable Notes
@@ -172,17 +182,17 @@ Base URL: `http://localhost:3000/api/v1`
 
 ### User Endpoints
 
-| Method | Endpoint         | Description              | Auth Required |
-| ------ | ---------------- | ------------------------ | ------------- |
-| GET    | `/users/profile` | Get current user profile | Yes           |
+| Method | Endpoint    | Description              | Auth Required |
+| ------ | ----------- | ------------------------ | ------------- |
+| GET    | `/users/me` | Get current user profile | Yes           |
 
 ### Event Endpoints
 
 | Method | Endpoint               | Description                  | Auth Required | Role            |
 | ------ | ---------------------- | ---------------------------- | ------------- | --------------- |
 | GET    | `/events`              | Get all events               | No            | -               |
-| GET    | `/events/:id`          | Get event by ID              | No            | -               |
 | POST   | `/events`              | Create a new event           | Yes           | Admin           |
+| GET    | `/events/:id`          | Get event by ID              | No            | -               |
 | PATCH  | `/events/:id`          | Update an event              | Yes           | Admin/Organizer |
 | DELETE | `/events/:id`          | Delete an event              | Yes           | Admin/Organizer |
 | POST   | `/events/:id/register` | Register for an event        | Yes           | User            |
@@ -202,10 +212,28 @@ Base URL: `http://localhost:3000/api/v1`
 {
   "title": "Annual Tech Conference",
   "description": "A gathering of software architects.",
-  "date": "2026-10-31T14:30:00.000Z",
+  "date": "2026-12-31T23:30:00.000Z",
   "location": "Delhi, India",
   "category": "Conference",
   "capacity": 500
+}
+```
+
+### Standardized Response Payload (JSend Format)
+
+```json
+// Success Example:
+
+{
+  "success": true,
+  "message": "Event retrieved successfully",
+  "data": {
+    "event": {
+      "id": "60d5ecb8b392d",
+      "title": "Annual Tech Conference",
+      "capacity": 500
+    }
+  }
 }
 ```
 
@@ -231,9 +259,9 @@ The project uses a centralized error handling pattern in `src/middlewares/errorH
 3. **Validation Errors** - Handled by Zod and validate middleware
 4. **Async Errors** - Automatically caught and passed to the error handler
 
-### Response format
-
 ```json
+// Error Example:
+
 {
   "success": false,
   "message": "Something went wrong",
