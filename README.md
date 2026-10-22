@@ -2,6 +2,8 @@
 
 An enterprise-grade, highly scalable backend REST API for an Event Management System. Built with Node.js, Express, MongoDB, and JWT authentication. Features a strict Feature-Based (Domain-Driven) architecture, Node.js cluster mode, aggressive rate limiting, and comprehensive Zod validation.
 
+**🚀 Live API Base URL:** [https://eventt-managementt.onrender.com](https://eventt-managementt.onrender.com)
+
 ## 📖 Table of Contents
 
 - [About the Project](#-about-the-project)
@@ -156,8 +158,8 @@ The app starts on the port defined in `.env` (default `http://localhost:3000`).
 
 ```json
 {
-  "dev": "nodemon server.js",
-  "start": "node server.js",
+  "dev": "nodemon src/server.js",
+  "start": "node src/server.js",
   "test": "echo \"Error: no test specified\" && exit 1"
 }
 ```
@@ -170,7 +172,9 @@ The app starts on the port defined in `.env` (default `http://localhost:3000`).
 
 ## 📡 API Reference
 
-Base URL: `http://localhost:3000/api/v1`
+**Production URL:** `https://eventt-managementt.onrender.com/api/v1`
+
+**Base URL**: `http://localhost:3000/api/v1`
 
 ### Authentication Endpoints
 
