@@ -33,4 +33,4 @@ attendeeSchema.index({event: 1, user: 1}, {unique: true});
 
 const Attendee = mongoose.model("Attendee", attendeeSchema);
 
-export default Attendee;
+export {Attendee};

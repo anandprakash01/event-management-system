@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {maxLength, minLength} from "zod";
 
 const eventSchema = new mongoose.Schema(
   {
@@ -20,11 +21,8 @@ const eventSchema = new mongoose.Schema(
       type: Date,
       required: [true, "Event date and time are required"],
       validate: {
-        // This function runs right before saving to the DB
-        validator: value => {
-          return value > Date.now();
-        },
-        message: "Event date must be in the future",
+        validator: value => value > Date.now(),
+        message: "Event date can not be in past",
       },
     },
     location: {
@@ -85,4 +83,4 @@ eventSchema.index({date: 1});
 
 const Event = mongoose.model("Event", eventSchema);
 
-export default Event;
+export {Event};

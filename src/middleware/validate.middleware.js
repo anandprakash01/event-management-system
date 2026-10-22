@@ -1,6 +1,6 @@
-import AppError from "../utils/AppError.js";
+import {AppError} from "../utils/AppError.js";
 
-const validate = schema => (req, res, next) => {
+const validateRequest = schema => (req, res, next) => {
   const parsedData = schema.safeParse({
     body: req.body,
     query: req.query,
@@ -10,16 +10,16 @@ const validate = schema => (req, res, next) => {
   if (!parsedData.success) {
     const flatErrors = parsedData.error.flatten().fieldErrors;
 
-    const errors = parsedData.error.issues[0].message;
+    // Grabs the very first error message Zod generates
+    const errorMessage = parsedData.error.issues[0].message;
+
     // const errors = parsedData.error.format();
-
     // console.log(errors);
-
     // const path = parsedData.error.issues[0].path;
     // const fieldName =
     //   path.length > 0 ? path[path.length - 1].charAt(0).toUpperCase() : "Field";
 
-    throw new AppError(400, `Invalid input data: ${errors}`);
+    throw new AppError(400, `Invalid input data: ${errorMessage}`);
   }
 
   req.body = parsedData.data.body;
@@ -29,4 +29,4 @@ const validate = schema => (req, res, next) => {
   next();
 };
 
-export {validate};
+export {validateRequest};

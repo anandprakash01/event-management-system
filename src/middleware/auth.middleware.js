@@ -1,10 +1,14 @@
 import jwt from "jsonwebtoken";
 
-import User from "../modules/users/user.model.js";
-import env from "../../config/env.js";
-import AppError from "../utils/AppError.js";
+import {AppError} from "../utils/AppError.js";
+import {asyncHandler} from "../utils/asyncHandler.js";
+import {env} from "../config/env.js";
+import {User} from "../modules/user/user.model.js";
 
-const protect = async (req, res, next) => {
+const protect = asyncHandler(async (req, res, next) => {
+  const queryParams = req.query;
+  const param = req.params;
+
   let token;
 
   if (req.headers.authorization?.startsWith("Bearer")) {
@@ -15,21 +19,17 @@ const protect = async (req, res, next) => {
     console.log("Cookie token found!");
   }
 
-  if (!token) {
-    throw new AppError(401, "You are not logged in. Please log in to get access.");
-  }
+  const decoded = jwt.verify(token, env.JWT_SECRET_KEY);
 
-  const decodedToken = jwt.verify(token, env.JWT_SECRET_KEY);
-
-  const currentUser = await User.findById(decodedToken.id).select("-__v");
+  const currentUser = await User.findById(decoded.id).select("-__v");
 
   if (!currentUser) {
-    throw new AppError(401, "The user belonging to this token no longer exists.");
+    throw new AppError(401, "Invalid token, please login");
   }
 
   req.user = currentUser;
   next();
-};
+});
 
 const restrictTo = (...roles) => {
   return (req, res, next) => {
