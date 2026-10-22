@@ -12,6 +12,9 @@ import eventRouter from "./modules/event/event.routes.js";
 
 const app = express();
 
+// Added this line so Express trusts Render's proxy
+app.set("trust proxy", 1);
+
 app.use(cors());
 app.use(helmet());
 
