@@ -1,6 +1,6 @@
 {
   "name": "event-management-system",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "An enterprise-grade event management API built with Node.js and MongoDB. It utilizes a strict Feature-Based (Vertical Slicing) architecture for absolute domain encapsulation, making it highly scalable and microservice-ready.",
   "homepage": "https://github.com/anandprakash01/event-management-system#readme",
   "bugs": {
