@@ -14,6 +14,8 @@ const app = express();
 
 // Added this line so Express trusts Render's proxy
 app.set("trust proxy", 1);
+// Express thinks the direct connection (Render's load balancer) is the user. Everyone shares the same IP, which breaks rate limiters.
+// With "trust proxy", 1: Express knows there is exactly 1 proxy in front of it. It reads the X-Forwarded-For header provided by Render and correctly assigns req.ip to the actual user's IP address.
 
 app.use(cors());
 app.use(helmet());
@@ -30,6 +32,22 @@ app.use("/api", limiter);
 
 app.use(express.json());
 app.use(cookieParser());
+
+// Base Route
+app.get("/", (req, res) => {
+  if (req.accepts("html")) {
+    return res.status(200)
+      .send(`<div style="font-family: system-ui; text-align: center; padding-top: 50px;">
+      <h1 style="color: #3b82f6;">🎫 Event Management API is Online</h1>
+      <p>System is running securely in ${process.env.NODE_ENV} mode.</p>
+      <a href="https://github.com/anandprakash01/event-management-system" style="color: #0f172a;">View Documentation</a>
+    </div>`);
+  }
+  res.status(200).json({
+    success: true,
+    message: "System is running",
+  });
+});
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
